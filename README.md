@@ -1,7 +1,7 @@
 #Matrix calculator
 
 Simple matrix calculator with next actions:
-multiply matrix, matrix on number,transponse matrix.
+matrix multiplication, matrix multiply on number,transponse matrix.
 
 
 # Install
