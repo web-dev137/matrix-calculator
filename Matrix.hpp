@@ -1,5 +1,6 @@
 #include<iostream>
 #include <algorithm>
+#include <stdexcept>
 
 template <typename T>
 class Matrix {
@@ -26,8 +27,18 @@ public:
     Matrix<T>& operator=(const Matrix<T>& B);
     Matrix<T>& operator=(Matrix<T>&& B) noexcept;
 
-    T& operator()(int i,int j) { return matrix[i][j]; }
-    const T& operator()(int i,int j) const { return matrix[i][j];}
+    T& operator()(int i,int j) {
+        if(i < 0 || i >= rows || j < 0 || j >=columns) {
+            throw std::out_of_range("Matrix index out of range");
+        }
+        return matrix[i][j]; 
+    }
+    const T& operator()(int i,int j) const { 
+        if(i < 0 || i >= rows || j < 0 || j >=columns) {
+            throw std::out_of_range("Matrix index out of range");
+        }
+        return matrix[i][j];
+    }
     
 
     Matrix<T> operator!();
@@ -59,7 +70,7 @@ Matrix<T>::Matrix(const Matrix<T>& B) : rows(B.rows),columns(B.columns) {
     for(int i = 0; i < rows; i++) {
         matrix[i] = new T[columns];// Выделяем память под строку 
         for(int j = 0; j < columns; j++) {
-            matrix[i][j] = B(i,j);// Копирование
+            matrix[i][j] = B.matrix[i,j];// Копирование
         }
     }
 };
@@ -83,7 +94,10 @@ Matrix<T>::Matrix(Matrix<T>&& B) noexcept
 template <typename T>
 Matrix<T>& Matrix<T>::operator=(Matrix<T>&& B) noexcept {
     if(this != &B) {
+        for (int i = 0; i < rows; i++) delete[] matrix[i];
         delete[] matrix;
+        rows =0;
+        columns = 0;
         matrix = B.matrix;
         rows = B.rows;
         columns = B.columns;
@@ -131,7 +145,14 @@ Matrix<T>& Matrix<T>::operator=(const Matrix<T>& B) {
     if(this == &B) return *this;
     rows = B.rows;
     columns = B.columns;
-    std::swap(matrix, B.matrix);
+    
+    matrix = new T*[rows]; // Выделяем память массива указателей на строки
+    for(int i = 0; i < rows; i++) {
+        matrix[i] = new T[columns];// Выделяем память под строку 
+        for(int j = 0; j < columns; j++) {
+            matrix[i][j] = B.matrix[i,j];// Копирование
+        }
+    }
     return *this;
 }
 
@@ -140,7 +161,7 @@ Matrix<T>& Matrix<T>::operator=(const Matrix<T>& B) {
  */
 template <typename T>
 Matrix<T> Matrix<T>::operator!() {
-    Matrix<T> result(rows,columns);
+    Matrix<T> result(columns,rows);
 
     for (int i = 0; i < rows; i++){
         for (int j = 0; j < columns; j++){
@@ -155,9 +176,6 @@ Matrix<T> Matrix<T>::operator!() {
  */
 template <typename T>
 Matrix<T> Matrix<T>::operator*(T number) const {
-    if(!number) {
-        throw std::invalid_argument("Argument number is missed");
-    }
     Matrix<T> result(rows,columns);
 
     for (int i = 0; i < rows; i++){
