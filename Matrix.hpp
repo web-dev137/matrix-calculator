@@ -41,7 +41,7 @@ public:
     }
     
 
-    Matrix<T> operator!();
+    Matrix<T> operator!()const;
     template <typename U>
     friend std::istream& operator>>(std::istream& in, Matrix<U>& M);
     template <typename U>
@@ -96,8 +96,6 @@ Matrix<T>& Matrix<T>::operator=(Matrix<T>&& B) noexcept {
     if(this != &B) {
         for (int i = 0; i < rows; i++) delete[] matrix[i];
         delete[] matrix;
-        rows =0;
-        columns = 0;
         matrix = B.matrix;
         rows = B.rows;
         columns = B.columns;
@@ -162,8 +160,8 @@ Matrix<T>& Matrix<T>::operator=(const Matrix<T>& B) {
  * Перегрузка оператора транспонирования матрицы
  */
 template <typename T>
-Matrix<T> Matrix<T>::operator!() {
-    Matrix<T> result(columns,rows);
+Matrix<T> Matrix<T>::operator!() const {
+    Matrix<T> result(columns,rows); 
 
     for (int i = 0; i < rows; i++){
         for (int j = 0; j < columns; j++){
@@ -206,7 +204,7 @@ Matrix<T>::~Matrix(){
 template <typename T>
 Matrix<T> Matrix<T>::operator*(const Matrix<T>& B) {
     if(columns != B.rows) {
-        throw std::invalid_argument(" num columns A != num rows B");
+        throw std::invalid_argument("num columns A not equal num rows B");
     }
 
     Matrix<T> result(rows,B.columns);
