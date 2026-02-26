@@ -70,7 +70,7 @@ Matrix<T>::Matrix(const Matrix<T>& B) : rows(B.rows),columns(B.columns) {
     for(int i = 0; i < rows; i++) {
         matrix[i] = new T[columns];// Выделяем память под строку 
         for(int j = 0; j < columns; j++) {
-            matrix[i][j] = B.matrix[i,j];// Копирование
+            matrix[i][j] = B.matrix[i][j];// Копирование
         }
     }
 };
@@ -143,6 +143,8 @@ std::ostream& operator<<(std::ostream& os,const Matrix<U>& M) {
 template <typename T>
 Matrix<T>& Matrix<T>::operator=(const Matrix<T>& B) {
     if(this == &B) return *this;
+    for (int i = 0; i < rows; i++) delete[] matrix[i];
+    delete[] matrix;
     rows = B.rows;
     columns = B.columns;
     
