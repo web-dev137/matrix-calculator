@@ -96,6 +96,7 @@ Matrix<T>& Matrix<T>::operator=(Matrix<T>&& B) noexcept {
     if(this != &B) {
         for (int i = 0; i < rows; i++) delete[] matrix[i];
         delete[] matrix;
+        
         matrix = B.matrix;
         rows = B.rows;
         columns = B.columns;
@@ -141,8 +142,13 @@ std::ostream& operator<<(std::ostream& os,const Matrix<U>& M) {
 template <typename T>
 Matrix<T>& Matrix<T>::operator=(const Matrix<T>& B) {
     if(this == &B) return *this;
+
+    /**
+     * Освобожение памяти
+     */
     for (int i = 0; i < rows; i++) delete[] matrix[i];
     delete[] matrix;
+
     rows = B.rows;
     columns = B.columns;
     
