@@ -27,15 +27,16 @@ After build project in build/tests you can run ./tests
 ## Usage
 Choice operation.
 Enter number from menu.
+
 ## Examples
 
-A*B
-Enter size of matrix A <rows> <columns> for example: 2 2
-Fill matrix:
+## A*B
+
 ![Alt text](docs/multiply.png)
 
-A*number
+## A*number
 ![Alt text](docs/scalar.png)
 
-Transponse matrix
+## Transponse matrix
+
 ![Alt text](docs/transponse.png)
